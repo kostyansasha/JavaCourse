@@ -21,7 +21,6 @@ public class Task {
     public Task(String title, int time) {
         this.title = title;
         this.time = time;
-
     }
 
 

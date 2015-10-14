@@ -7,7 +7,7 @@
 public abstract class TaskList {
     public abstract void add(Task task) throws Exception;
 
-    public abstract boolean remove(Task task);
+    public abstract boolean remove(Task task) throws Exception;
 
     public abstract int size();
 
@@ -51,8 +51,8 @@ public abstract class TaskList {
                 if (point.isRepeated()) {
                     int a;
                     a = point.nextTimeAfter(from);
-                    if (a <= to && a >= from) {
-                        // >= from >>> becouse can return -1
+                    if (a >= from && a <= to) {
+                        // >= from >>> because can return -1
                         try {
                             linkListIntTo.add(point);
                         } catch (Exception e) {

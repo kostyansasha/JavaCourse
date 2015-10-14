@@ -32,12 +32,13 @@ public class LinkedTaskList extends TaskList {
                 task.getEndTime() - task.getTime()) {
             throw new Exception ("interval can not be >= EndTime - Time");
         }
+
         // add task in list
         TaskNode node = new TaskNode();
         node.setTask(task);
         node.setNext(first);
-        first = node;
-        numberOfSizeArrayTask++;
+        this.first = node;
+        this.numberOfSizeArrayTask++;
     }
 
     /**
@@ -58,33 +59,36 @@ public class LinkedTaskList extends TaskList {
     /** Delete task from list
      *
      */
-    public boolean remove(Task task) {
-        if (task == null) {
-        }
+    public boolean remove(Task task) throws Exception {
+        if (task == null)
+            throw new Exception("incoming task is null");
 
         TaskNode pointPredecessor;
         TaskNode point = this.first;
 
         if (point == null)
             return false;
+
         // if one task in a list
-        if (point.getNext() == null && point.getTask() == task) {
+        if ((point.getNext() == null) && point.getTask().equals(task)) {
             this.first = null;
             this.numberOfSizeArrayTask--;
             return true;
         }
+
         // if the first in a list
-        if (point.getTask() == task) {
+        if (point.getTask().equals(task)) {
             this.first = point.getNext();
             this.numberOfSizeArrayTask--;
             return true;
         }
+
         //if the task is in the middle of the list
         pointPredecessor = point;
         point = point.getNext();
 
         for (int i = 0; i < size() - 2; i++) { //without first and last
-            if (point.getTask() == task) {
+            if (point.getTask().equals(task)) {
                 pointPredecessor.setNext(point.getNext());
                 this.numberOfSizeArrayTask--;
                 return true;
@@ -92,8 +96,9 @@ public class LinkedTaskList extends TaskList {
             pointPredecessor = point;
             point = point.getNext();
         }
+
         // if task is last in list
-        if (point.getNext() == null && point.getTask() == task) {
+        if (point.getNext() == null && point.getTask().equals(task)) {
             pointPredecessor.setNext(null);
             this.numberOfSizeArrayTask--;
             return true;
@@ -112,11 +117,13 @@ public class LinkedTaskList extends TaskList {
      * return the number of task that specified in the list
      */
     public Task getTask(int index) {
-        int count = 0;
-        TaskNode point = first;
         if (index > numberOfSizeArrayTask || index < 0) {
             return null;
         }
+
+        int count = 0;
+        TaskNode point = first;
+
         if (point == null)
             return null;
         while (index >= count) {

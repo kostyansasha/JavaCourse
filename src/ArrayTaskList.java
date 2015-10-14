@@ -32,7 +32,7 @@ public class ArrayTaskList extends TaskList {
                                     task.getEndTime() - task.getTime()) {
             throw new Exception ("interval can not be >= EndTime - Time");
         }
-
+        // copy old array in new
         Task tempArrayTask[] = new Task[numberOfSizeArrayTask + 1];
         for (int i=0; i < numberOfSizeArrayTask; i++) {
                 tempArrayTask[i] = arrayTask[i];
@@ -53,18 +53,13 @@ public class ArrayTaskList extends TaskList {
         itemFound = false;
 
         for (i = 0; i < numberOfSizeArrayTask; i++) { //Not ArrayTask.length-1!
-            if (task == arrayTask[i]) {  /*
-
-
-            METOD equals() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-            */
+            if (task.equals(arrayTask[i])) {
                 // delete the last element
                 if (i == numberOfSizeArrayTask-1) {
                     arrayTask[i] = null;
-                    numberOfSizeArrayTask -= 1;
+                    numberOfSizeArrayTask--;
 
+                    // copy old array in new
                     Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
                     for (int k=0; k < numberOfSizeArrayTask; k++) {
                         tempArrayTask[k] = arrayTask[k];
@@ -74,13 +69,15 @@ public class ArrayTaskList extends TaskList {
                     itemFound = true;
                     break;
                 }
+
                 // not last element, fist found
                 for (j = i; j < numberOfSizeArrayTask-1; j++) {
                     arrayTask[j] = arrayTask[j + 1];
                 }
                 arrayTask[numberOfSizeArrayTask-1] = null;
-                numberOfSizeArrayTask -= 1;
+                numberOfSizeArrayTask--;
 
+                // copy old array in new
                 Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
                 for (int k=0; k < numberOfSizeArrayTask; k++) {
                     tempArrayTask[k] = arrayTask[k];
@@ -95,6 +92,7 @@ public class ArrayTaskList extends TaskList {
         if (!itemFound) {
             return false;
         }
+        // task delete
         return true;
     }
 
