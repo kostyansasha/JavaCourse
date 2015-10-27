@@ -1,5 +1,8 @@
 /**
- * Created by Саша on 03.10.2015.
+ *
+ *
+ * @author Sasha Kostyan
+ * @version %I%, %G%
  */
 
 //package ua.sumdu.j2se.kostyan.tasks;
@@ -11,11 +14,13 @@ public class ArrayTaskList extends TaskList {
     // create array of tasks
     private Task arrayTask[] /*= new Task[numberOfSizeArrayTask]*/;
 
-/**
-  * Add to the list of task
-  */
-
-  public void add(Task task) throws Exception {
+    /**
+     * method that add to the list of task
+     *
+     * @param task that need add
+     * @throws Exception
+     */
+    public void add(Task task) throws Exception {
         if (task.getTitle() == null) {
             throw new Exception ("Title can not be null");
         }
@@ -34,19 +39,25 @@ public class ArrayTaskList extends TaskList {
         }
         // copy old array in new
         Task tempArrayTask[] = new Task[numberOfSizeArrayTask + 1];
-        for (int i=0; i < numberOfSizeArrayTask; i++) {
+        for (int i=0; i < numberOfSizeArrayTask; i++)
                 tempArrayTask[i] = arrayTask[i];
-        }
         tempArrayTask[numberOfSizeArrayTask] = task;
         arrayTask = tempArrayTask;
         numberOfSizeArrayTask++;
 
     }
 
-/** Delete task from list
-  *
-  */
-   public boolean remove(Task task) {
+    /**
+     * method that delete task from list
+     *
+     * @param task that need delete
+     * @return <code>true</code> if the task delete
+     *               <code>false</code> if the task does not delete
+     */
+    public boolean remove(Task task) throws Exception {
+        if (task == null)
+            throw new Exception("incoming task is null");
+
         int i; // to find a match for the entire array
         int j; // to move an item after the first found
         boolean itemFound; //status delete
@@ -61,9 +72,8 @@ public class ArrayTaskList extends TaskList {
 
                     // copy old array in new
                     Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
-                    for (int k=0; k < numberOfSizeArrayTask; k++) {
+                    for (int k=0; k < numberOfSizeArrayTask; k++)
                         tempArrayTask[k] = arrayTask[k];
-                    }
                     arrayTask = tempArrayTask;
 
                     itemFound = true;
@@ -79,9 +89,8 @@ public class ArrayTaskList extends TaskList {
 
                 // copy old array in new
                 Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
-                for (int k=0; k < numberOfSizeArrayTask; k++) {
+                for (int k=0; k < numberOfSizeArrayTask; k++)
                     tempArrayTask[k] = arrayTask[k];
-                }
                 arrayTask = tempArrayTask;
 
                 itemFound = true;
@@ -96,18 +105,21 @@ public class ArrayTaskList extends TaskList {
         return true;
     }
 
-/** Number of jobs in the list
-  *
-  */
+    /**
+     *  Number of jobs in the list
+     *
+     * @return number Of Size ArrayTask
+     */
     public int size() {
         return numberOfSizeArrayTask;
     }
 
-/** return the number of task that specified in the list
-  *
- *
- *
-  */
+    /**
+     * method that return the number of task that specified in the list
+     *
+     * @param index of task in list
+     * @return task
+     */
     public Task getTask(int index) {
         if (index > numberOfSizeArrayTask || index < 0) {
             return null;
@@ -115,13 +127,14 @@ public class ArrayTaskList extends TaskList {
         return arrayTask[index];
     }
 
-/**
-  *
-  * method that returns a subset of the tasks that
-  * are scheduled to perform in the interval
-  *
-  */
-/*   public TaskList incoming(int from, int to) {
+/*
+    /**
+     *
+    * method that returns a subset of the tasks that
+    * are scheduled to perform in the interval
+    *
+
+   public TaskList incoming(int from, int to) {
         ArrayTaskList arrayIntTo = new ArrayTaskList();
 
         for (int i = 0; i < numberOfSizeArrayTask; i++) {

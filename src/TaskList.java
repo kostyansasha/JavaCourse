@@ -1,5 +1,8 @@
 /**
- * Created by Саша on 03.10.2015.
+ *
+ *
+ * @author Sasha Kostyan
+ * @version %I%, %G%
  */
 
 //package ua.sumdu.j2se.kostyan.tasks;

@@ -1,5 +1,8 @@
 /**
- * Created by Саша on 03.10.2015.
+ *
+ *
+ * @author Sasha Kostyan
+ * @version %I%, %G%
  */
 
 //package ua.sumdu.j2se.kostyan.tasks;
@@ -10,9 +13,11 @@ public class LinkedTaskList extends TaskList {
     //
     private TaskNode first;
 
-
     /**
-     * Add to the list of task
+     * method that add to the list of task
+     *
+     * @param task that need add
+     * @throws Exception
      */
     public void add(Task task) throws Exception {
         // different exception
@@ -41,10 +46,11 @@ public class LinkedTaskList extends TaskList {
         this.numberOfSizeArrayTask++;
     }
 
+    /*
     /**
      * find task in list
-     */
- /*   public TaskNode find (Task task) {
+
+    public TaskNode find (Task task) {
         return find(first, task);
     }
     private TaskNode find (TaskNode point, Task task) {
@@ -56,8 +62,13 @@ public class LinkedTaskList extends TaskList {
     }
  */
 
-    /** Delete task from list
+    /**
+     * method that delete task from list
      *
+     * @param task that need delete
+     * @return <code>true</code> if the task delete
+     *               <code>false</code> if the task does not delete
+     * @throws Exception
      */
     public boolean remove(Task task) throws Exception {
         if (task == null)
@@ -106,15 +117,20 @@ public class LinkedTaskList extends TaskList {
         return false;
     }
 
-    /** Number of jobs in the list
+    /**
+     * Number of jobs in the list
      *
+     * @return number Of Size ArrayTask
      */
     public int size() {
         return numberOfSizeArrayTask;
     }
 
     /**
-     * return the number of task that specified in the list
+     * method that return the number of task that specified in the list
+     *
+     * @param index of task in list
+     * @return task
      */
     public Task getTask(int index) {
         if (index > numberOfSizeArrayTask || index < 0) {
@@ -135,13 +151,14 @@ public class LinkedTaskList extends TaskList {
         return point.getTask();
     }
 
+    /*
     /**
      *
      * method that returns a subset of the tasks that
      * are scheduled to perform in the interval
      *
-     */
-  /*  public TaskList incoming(int from, int to) {
+
+    public TaskList incoming(int from, int to) {
         LinkedTaskList linkListIntTo = new LinkedTaskList();
         TaskNode point = first;
 
