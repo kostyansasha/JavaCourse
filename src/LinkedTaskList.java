@@ -1,3 +1,8 @@
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
 /**
  *
  *
@@ -19,24 +24,7 @@ public class LinkedTaskList extends TaskList {
      * @param task that need add
      * @throws Exception
      */
-    public void add(Task task) throws Exception {
-        // different exception
-        if (task.getTitle() == null) {
-            throw new Exception ("Title can not be null");
-        }
-        if (task.isRepeated() && task.getRepeatInterval() == 0) {
-            throw new Exception ("interval can not be 0");
-        }
-        if (task.getTime() < 0) {
-            throw new Exception ("time can not be < 0");
-        }
-        if (task.isRepeated() && (task.getTime() > task.getEndTime())) {
-            throw new Exception ("time can not be > endTime");
-        }
-        if (task.isRepeated() && task.getRepeatInterval() >=
-                task.getEndTime() - task.getTime()) {
-            throw new Exception ("interval can not be >= EndTime - Time");
-        }
+    public void add(Task task)  {
 
         // add task in list
         TaskNode node = new TaskNode();
@@ -46,21 +34,6 @@ public class LinkedTaskList extends TaskList {
         this.numberOfSizeArrayTask++;
     }
 
-    /*
-    /**
-     * find task in list
-
-    public TaskNode find (Task task) {
-        return find(first, task);
-    }
-    private TaskNode find (TaskNode point, Task task) {
-        if (point == null)
-            return null;
-        if (point.getTask() == task)
-            return first;
-        return find(point.getNext(), task);
-    }
- */
 
     /**
      * method that delete task from list
@@ -133,9 +106,7 @@ public class LinkedTaskList extends TaskList {
      * @return task
      */
     public Task getTask(int index) {
-        if (index > numberOfSizeArrayTask || index < 0) {
-            return null;
-        }
+        rangeCheck(index);
 
         int count = 0;
         TaskNode point = first;
@@ -151,56 +122,115 @@ public class LinkedTaskList extends TaskList {
         return point.getTask();
     }
 
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //@Override
+    public Iterator<Task> iterator() {
+
+        return new MyIterator();
+    }
     /*
-    /**
-     *
-     * method that returns a subset of the tasks that
-     * are scheduled to perform in the interval
-     *
-
-    public TaskList incoming(int from, int to) {
-        LinkedTaskList linkListIntTo = new LinkedTaskList();
-        TaskNode point = first;
-
-        for (int i = 0; i < numberOfSizeArrayTask; i++) {
-            // Not active task
-            if (!point.getTask().isActive()) {
-                point = point.getNext();
-                continue;
-            } else {
-                // active task
-                // Not repeat
-                if (!point.getTask().isRepeated()) {
-                    if (point.getTask().getTime() > from
-                            && point.getTask().getTime() <= to) {
-                        try {
-                            linkListIntTo.add(point.getTask());
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    point = point.getNext();
-                    continue;
-                }
-                    // repeat task
-                if (point.getTask().isRepeated()) {
-                    int a;
-                    a = point.getTask().nextTimeAfter(from);
-                    if (a <= to && a >= from) {
-                                        // >= from >>> becouse can return -1
-                        try {
-                            linkListIntTo.add(point.getTask());
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    point = point.getNext();
-                    continue;
-                }
+        TaskNode node(int index) {
+            if (index < (numberOfSizeArrayTask >> 1)) {
+                TaskNode x = first;
+                for (int i = 0; i < index; i++)
+                    x = x.getNext();
+                return x;
             }
-        }
-        return linkListIntTo;
-    }*/
+                return first;
 
+        }
+    */
+    private class MyIterator implements Iterator<Task> {
+        private TaskNode lastReturned;
+        private TaskNode next;
+        private int nextIndex;
+
+        public MyIterator() {
+            next = first;
+
+        }
+
+        public MyIterator(TaskNode node) {
+            next = node;
+
+        }
+
+        public MyIterator(int index) {
+
+        }
+
+        public boolean hasNext() {
+            //return nextIndex < numberOfSizeArrayTask; //LinkedTaskList.this.numberOfSizeArrayTask
+            if (next == null) return false;
+            // if (next.getNext() == null) return false;
+            return true;
+        }
+
+        public Task next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+
+            lastReturned = next;
+            next = next.getNext();
+            nextIndex+=1;
+            return lastReturned.getTask();
+        }
+
+        public void remove() {
+            if (lastReturned == null)
+                throw new IllegalStateException();
+
+            try {
+                LinkedTaskList.this.remove(getTask(nextIndex-1));
+
+                lastReturned = null;
+                nextIndex--;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+         /*   // if one in list
+            if (next.getNext() == null && lastReturned == null) {
+                first = null;
+                numberOfSizeArrayTask--;
+                return;
+            }
+            // if the first in a list
+            if (lastReturned == null && next.getNext() !=null) {
+                first = next.getNext();
+                numberOfSizeArrayTask--;
+                return;
+            }
+            //if in middle
+            if (lastReturned != null && next.getNext() !=null) {
+                lastReturned.setNext(next.getNext());
+                next = next.getNext();
+
+               // if (next == lastReturned)
+               //     lastReturned = null;
+
+                numberOfSizeArrayTask--;
+
+                return;
+            }
+            //if last
+            if (lastReturned != null && next.getNext() == null) {
+                lastReturned.setNext(null);
+                return;
+            }*/
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "LinkedTaskList{" +
+                "numberOfSizeArrayTask=" + numberOfSizeArrayTask +
+                ", first=" + first +
+                '}';
+    }
 
 }

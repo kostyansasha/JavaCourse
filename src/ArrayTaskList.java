@@ -1,3 +1,7 @@
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  *
  *
@@ -20,23 +24,7 @@ public class ArrayTaskList extends TaskList {
      * @param task that need add
      * @throws Exception
      */
-    public void add(Task task) throws Exception {
-        if (task.getTitle() == null) {
-            throw new Exception ("Title can not be null");
-        }
-        if (task.isRepeated() && task.getRepeatInterval() == 0) {
-            throw new Exception ("interval can not be 0");
-        }
-        if (task.getTime() < 0) {
-            throw new Exception ("time can not be < 0");
-        }
-        if (task.isRepeated() && (task.getTime() > task.getEndTime())) {
-            throw new Exception ("time can not be > endTime");
-        }
-        if (task.isRepeated() && task.getRepeatInterval() >=
-                                    task.getEndTime() - task.getTime()) {
-            throw new Exception ("interval can not be >= EndTime - Time");
-        }
+    public void add(Task task)  {
         // copy old array in new
         Task tempArrayTask[] = new Task[numberOfSizeArrayTask + 1];
         for (int i=0; i < numberOfSizeArrayTask; i++)
@@ -111,6 +99,7 @@ public class ArrayTaskList extends TaskList {
      * @return number Of Size ArrayTask
      */
     public int size() {
+
         return numberOfSizeArrayTask;
     }
 
@@ -121,58 +110,79 @@ public class ArrayTaskList extends TaskList {
      * @return task
      */
     public Task getTask(int index) {
-        if (index > numberOfSizeArrayTask || index < 0) {
-            return null;
-        }
+        rangeCheck(index);
         return arrayTask[index];
     }
 
-/*
-    /**
-     *
-    * method that returns a subset of the tasks that
-    * are scheduled to perform in the interval
-    *
 
-   public TaskList incoming(int from, int to) {
-        ArrayTaskList arrayIntTo = new ArrayTaskList();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public Iterator<Task> iterator() {
 
-        for (int i = 0; i < numberOfSizeArrayTask; i++) {
-            // Not active task
-            if (!arrayTask[i].isActive()) {
-                continue;
-            } else {
-                // active task
-                // Not repeat
-                if (!arrayTask[i].isRepeated()) {
-                    if (arrayTask[i].getTime() > from
-                            && arrayTask[i].getTime() <= to) {
-                        try {
-                            arrayIntTo.add(arrayTask[i]);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    continue;
-                }
-                    // repeat task
-                if (arrayTask[i].isRepeated()) {
-                    int a;
-                    a = arrayTask[i].nextTimeAfter(from);
-                    if (a <= to && a >= from) {
-                                        // >= from >>> becouse can return -1
-                        try {
-                            arrayIntTo.add(arrayTask[i]);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    continue;
-                }
-            }
-        }
-        return arrayIntTo;
+        return new MyIterator();
     }
-*/
 
+    private class MyIterator implements Iterator<Task> {
+        int cursor;       // index of next element to return
+        int lastRet = -1; // index of last element returned; -1 if no such
+
+        public void MyIterator() {
+            cursor = ArrayTaskList.this.numberOfSizeArrayTask;
+
+        }
+
+        public boolean hasNext() {
+            return cursor < numberOfSizeArrayTask; //ArrayTaskList.this.numberOfSizeArrayTask
+
+        }
+
+        public Task next() {
+            int i = cursor;
+            if (i >= numberOfSizeArrayTask)
+                throw new NoSuchElementException();
+
+            TaskList elementData = ArrayTaskList.this;
+            if (i >= elementData.size())
+                throw new ConcurrentModificationException();
+
+            cursor = i + 1;
+            return (Task) arrayTask[lastRet = i];
+        }
+
+        public void remove() {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+
+            try {
+                ArrayTaskList.this.remove(getTask(lastRet));
+                cursor = lastRet;
+                lastRet = -1;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            /* try {
+                int numMoved = numberOfSizeArrayTask - lastRet -1;
+                if (numMoved > 0)
+                    System.arraycopy(arrayTask, lastRet+1, arrayTask, lastRet, numMoved);
+                    //
+                    //
+               // else return;
+                arrayTask[--numberOfSizeArrayTask] = null;
+                numberOfSizeArrayTask--;
+
+                // copy old array in new
+                Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
+                for (int k=0; k < numberOfSizeArrayTask; k++)
+                    tempArrayTask[k] = arrayTask[k];
+                arrayTask = tempArrayTask;
+
+
+                cursor = lastRet;
+                lastRet = -1;
+
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException(); //
+                //
+            }*/
+        }
+    }
 }

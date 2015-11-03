@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 /**
  *
  *
@@ -7,14 +9,53 @@
 
 //package ua.sumdu.j2se.kostyan.tasks;
 
-public abstract class TaskList {
-    public abstract void add(Task task) throws Exception;
+public abstract class TaskList implements Iterable<Task> {
+    public abstract void add(Task task);
 
     public abstract boolean remove(Task task) throws Exception;
 
     public abstract int size();
 
     public abstract Task getTask(int index);
+
+    public abstract Iterator<Task> iterator();
+
+    public void rangeCheck(int index) {
+        if (index < 0 || index >= size())
+            throw new IndexOutOfBoundsException("Index: "+index);
+    }
+
+    @Override
+    public boolean  equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (o == null || !(o instanceof TaskList))
+            return false;
+
+        if ( ((TaskList) o).size() != this.size() )
+            return false;
+
+        Iterator<Task> itCurrent = iterator();
+        Iterator<Task> itObj = ((TaskList) o).iterator();
+
+        while (itCurrent.hasNext() && itObj.hasNext()) {
+            Task tItCur = itCurrent.next();
+            Task tItObj = itObj.next();
+
+            if ( !(tItCur == null ? tItObj == null : tItCur.equals(tItObj) ))
+                return false;
+        }
+        return true; //!(e1.hasNext() || e2.hasNext())
+    }
+
+    @Override
+    public int hashCode() {
+        int result = size();
+        result = 31 * result + getTask(0).hashCode()+getTask(result).hashCode();
+        return result;
+    }
+
 
 
     /**
@@ -68,5 +109,4 @@ public abstract class TaskList {
         }
         return linkListIntTo;
     }
-
 }

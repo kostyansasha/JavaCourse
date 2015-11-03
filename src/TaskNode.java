@@ -42,4 +42,22 @@ public class TaskNode {
     public TaskNode getNext() {
         return this.next;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        TaskNode taskNode = (TaskNode) o;
+
+        return !(task != null ? !task.equals(taskNode.task) : taskNode.task != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return task != null ? task.hashCode() : 0;
+    }
 }

@@ -29,7 +29,14 @@ public class Task {
      * @param title name Task
      * @param time  the beginning of the task
      */
-    public Task(String title, int time) {
+    public Task(String title, int time) throws Exception{
+        if (title == null) {
+            throw new Exception ("Title can not be null");
+        }
+        if (time < 0) {
+            throw new Exception ("time can not be < 0");
+        }
+
         this.title = title;
         this.time = time;
     }
@@ -46,7 +53,20 @@ public class Task {
      * @param end      of task
      * @param interval through which to repeat the task
      */
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, int start, int end, int interval) throws Exception {
+        if (title == null) {
+            throw new Exception ("Title can not be null");
+        }
+        if ( interval == 0) {
+            throw new Exception ("interval can not be 0");
+        }
+        if ( time > end ) {
+            throw new Exception ("time can not be > endTime");
+        }
+        if ( interval >= end - time) {
+            throw new Exception ("interval can not be >= EndTime - Time");
+        }
+
         this.title = title;
         this.start = start;
         this.end = end;
@@ -213,4 +233,39 @@ public class Task {
         return -1;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (time != task.time)   return false;
+        if (start != task.start) return false;
+        if (end != task.end)     return false;
+        if (interval != task.interval) return false;
+        if (active != task.active) return false;
+        if (repeat != task.repeat) return false;
+
+        if (title != null ? !title.equals(task.title) : task.title != null) return false;
+
+        return !(titleInterval != null ? !titleInterval.equals(task.titleInterval) : task.titleInterval != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (titleInterval != null ? titleInterval.hashCode() : 0);
+
+        result = 31 * result + time;
+        result = 31 * result + start;
+        result = 31 * result + end;
+        result = 31 * result + interval;
+
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (repeat ? 1 : 0);
+
+        return result;
+    }
 }
