@@ -1,3 +1,4 @@
+//package ua.sumdu.j2se.kostyan.tasks;
 import java.util.Iterator;
 
 /**
@@ -7,7 +8,6 @@ import java.util.Iterator;
  * @version %I%, %G%
  */
 
-//package ua.sumdu.j2se.kostyan.tasks;
 
 public abstract class TaskList implements Iterable<Task> {
     public abstract void add(Task task);
@@ -52,8 +52,24 @@ public abstract class TaskList implements Iterable<Task> {
     @Override
     public int hashCode() {
         int result = size();
-        result = 31 * result + getTask(0).hashCode()+getTask(result).hashCode();
+        result = 31 * result + getTask(0).hashCode()+getTask(result-1).hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("TaskList{   ").append("numberOfSizeArrayTask = ").append(size()).append(".").append( '\n' );
+
+        Iterator<Task> it = iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Task taskIt = it.next();
+            b.append("   task[").append(i).append("]: ").append( taskIt.toString()).append('\n');
+            i++;
+        }
+        b.append("}");
+        return b.toString();
     }
 
 
@@ -75,8 +91,8 @@ public abstract class TaskList implements Iterable<Task> {
 
             // Not active task
             if (!point.isActive()) {
-                // point = point.getNext();
-                continue;
+                // continue next step
+                // continue;
             } else {
                 // active task
                 // Not repeat

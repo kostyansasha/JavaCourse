@@ -60,4 +60,12 @@ public class TaskNode {
     public int hashCode() {
         return task != null ? task.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "TaskNode{" +
+                "task=" + task +
+                ", next=" + next +
+                '}';
+    }
 }

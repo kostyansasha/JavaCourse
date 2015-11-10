@@ -7,7 +7,7 @@
 
 //package ua.sumdu.j2se.kostyan.tasks;
 
-public class Task {
+public class Task implements Cloneable {
     private String title;
     private int time;
 
@@ -15,7 +15,6 @@ public class Task {
     private int end;
     private int interval;
 
-    private String titleInterval;
     private boolean active;
     private boolean repeat;
 
@@ -28,11 +27,14 @@ public class Task {
      *
      * @param title name Task
      * @param time  the beginning of the task
+     * @throws Exception which show that the task has not been created
      */
     public Task(String title, int time) throws Exception{
+
         if (title == null) {
             throw new Exception ("Title can not be null");
         }
+
         if (time < 0) {
             throw new Exception ("time can not be < 0");
         }
@@ -52,17 +54,22 @@ public class Task {
      * @param start    the beginning of the task
      * @param end      of task
      * @param interval through which to repeat the task
+     * @throws Exception which show that the task has not been created
      */
     public Task(String title, int start, int end, int interval) throws Exception {
+
         if (title == null) {
             throw new Exception ("Title can not be null");
         }
+
         if ( interval == 0) {
             throw new Exception ("interval can not be 0");
         }
+
         if ( time > end ) {
             throw new Exception ("time can not be > endTime");
         }
+
         if ( interval >= end - time) {
             throw new Exception ("interval can not be >= EndTime - Time");
         }
@@ -84,7 +91,7 @@ public class Task {
 
     /**
      * Set the name of task
-     * @param title
+     * @param title is name of task
      */
     public void setTitle(String title) {
         this.title = title;
@@ -120,6 +127,7 @@ public class Task {
         if (repeat) {
             return start;   //???
         }
+
         return time;
     }
 
@@ -127,12 +135,13 @@ public class Task {
      * Set time of tasks that are not repeated
      * if the problem is repeated, it has become such, not repeated.
      *
-     * @param time
+     * @param time is time for set
      */
     public void setTime(int time) {
         if (repeat) {
             repeat = false;
         }
+
         this.time = time;
     }
 
@@ -147,6 +156,7 @@ public class Task {
         if (repeat) {
             return start;   //???
         }
+
         return time; //- end; ???? час виконаня задачи
     }
 
@@ -159,6 +169,7 @@ public class Task {
         if (repeat) {
             return end;   //???
         }
+
         return time;
     }
 
@@ -171,6 +182,7 @@ public class Task {
         if (!repeat) {
             return 0;   //???
         }
+
         return interval;
     }
 
@@ -185,6 +197,7 @@ public class Task {
         if (!repeat) {
             repeat = true;
         }
+
         this.start = start;
         this.end = end;
         this.interval = interval;
@@ -207,14 +220,16 @@ public class Task {
      * time current, if subsequent to the time the problem is
      * not fulfilled, the method must return -1.
      *
-     * @param current
-     * @return
+     * @param current after which the task is executed
+     * @return time the next execution
      */
     public int nextTimeAfter(int current) {
         if (active) {
+
             if (time > current) {
                 return time;
             }
+
             if (repeat) {
                 if (start > current) {
                     return  start;
@@ -229,10 +244,13 @@ public class Task {
                     return i;
                 }
             }
+
         }
+
         return -1;
     }
 
+///////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -241,31 +259,69 @@ public class Task {
         Task task = (Task) o;
 
         if (time != task.time)   return false;
-        if (start != task.start) return false;
-        if (end != task.end)     return false;
-        if (interval != task.interval) return false;
+        //if (start != task.start) return false;
+        //if (end != task.end)     return false;
+        //if (interval != task.interval) return false;
         if (active != task.active) return false;
         if (repeat != task.repeat) return false;
 
-        if (title != null ? !title.equals(task.title) : task.title != null) return false;
+        if (!title.equals(task.title)) return false;
 
-        return !(titleInterval != null ? !titleInterval.equals(task.titleInterval) : task.titleInterval != null);
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result;
+
         result = title != null ? title.hashCode() : 0;
-        result = 31 * result + (titleInterval != null ? titleInterval.hashCode() : 0);
 
         result = 31 * result + time;
-        result = 31 * result + start;
-        result = 31 * result + end;
-        result = 31 * result + interval;
+  //     result = 31 * result + start;
+    //   result = 31 * result + end;
+      // result = 31 * result + interval;
 
         result = 31 * result + (active ? 1 : 0);
         result = 31 * result + (repeat ? 1 : 0);
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder t = new StringBuilder();
+
+        t.append("Task{ ").append("title='").append(title).append("', time=").append(time).append(", start=")
+                .append(start).append(", end=").append(end).append(", interval=").append(interval).append(", active=")
+                .append(active).append(", repeat=").append(repeat).append('}');
+
+        return t.toString();
+    }
+
+    @Override
+    public Task clone() {
+        Task result = null;
+
+        try {
+            result = (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Task in clone not create");
+        }
+
+        try {
+            result.setTitle(this.getTitle());
+            result.setTime(this.getTime());
+            result.setTime(this.getStartTime(), this.getEndTime(), this.getRepeatInterval());
+            result.setActive(this.isActive());
+            result.repeat = this.isRepeated();
+        } catch (Exception e) {
+            System.out.println("Task parametrs not set");
+            //e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }

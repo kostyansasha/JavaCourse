@@ -1,3 +1,4 @@
+//package ua.sumdu.j2se.kostyan.tasks;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -9,9 +10,7 @@ import java.util.NoSuchElementException;
  * @version %I%, %G%
  */
 
-//package ua.sumdu.j2se.kostyan.tasks;
-
-public class ArrayTaskList extends TaskList {
+public class ArrayTaskList extends TaskList implements  Cloneable {
 
     // variable for size of array
     private int numberOfSizeArrayTask;
@@ -22,13 +21,14 @@ public class ArrayTaskList extends TaskList {
      * method that add to the list of task
      *
      * @param task that need add
-     * @throws Exception
-     */
+      */
     public void add(Task task)  {
         // copy old array in new
         Task tempArrayTask[] = new Task[numberOfSizeArrayTask + 1];
+
         for (int i=0; i < numberOfSizeArrayTask; i++)
                 tempArrayTask[i] = arrayTask[i];
+
         tempArrayTask[numberOfSizeArrayTask] = task;
         arrayTask = tempArrayTask;
         numberOfSizeArrayTask++;
@@ -125,10 +125,6 @@ public class ArrayTaskList extends TaskList {
         int cursor;       // index of next element to return
         int lastRet = -1; // index of last element returned; -1 if no such
 
-        public void MyIterator() {
-            cursor = ArrayTaskList.this.numberOfSizeArrayTask;
-
-        }
 
         public boolean hasNext() {
             return cursor < numberOfSizeArrayTask; //ArrayTaskList.this.numberOfSizeArrayTask
@@ -137,15 +133,17 @@ public class ArrayTaskList extends TaskList {
 
         public Task next() {
             int i = cursor;
+
             if (i >= numberOfSizeArrayTask)
                 throw new NoSuchElementException();
 
             TaskList elementData = ArrayTaskList.this;
+
             if (i >= elementData.size())
                 throw new ConcurrentModificationException();
 
             cursor = i + 1;
-            return (Task) arrayTask[lastRet = i];
+            return  arrayTask[lastRet = i];
         }
 
         public void remove() {
@@ -159,30 +157,19 @@ public class ArrayTaskList extends TaskList {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            /* try {
-                int numMoved = numberOfSizeArrayTask - lastRet -1;
-                if (numMoved > 0)
-                    System.arraycopy(arrayTask, lastRet+1, arrayTask, lastRet, numMoved);
-                    //
-                    //
-               // else return;
-                arrayTask[--numberOfSizeArrayTask] = null;
-                numberOfSizeArrayTask--;
-
-                // copy old array in new
-                Task tempArrayTask[] = new Task[numberOfSizeArrayTask];
-                for (int k=0; k < numberOfSizeArrayTask; k++)
-                    tempArrayTask[k] = arrayTask[k];
-                arrayTask = tempArrayTask;
-
-
-                cursor = lastRet;
-                lastRet = -1;
-
-            } catch (IndexOutOfBoundsException ex) {
-                throw new ConcurrentModificationException(); //
-                //
-            }*/
         }
     }
+
+    @Override
+    public ArrayTaskList clone() throws CloneNotSupportedException {
+        ArrayTaskList result = (ArrayTaskList) super.clone();
+        result.numberOfSizeArrayTask = 0;
+
+        for (Task ff : this) {
+            result.add(ff.clone());
+        }
+
+        return result;
+    }
+
 }
