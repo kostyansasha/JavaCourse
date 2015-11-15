@@ -1,4 +1,5 @@
 //package ua.sumdu.j2se.kostyan.tasks;
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -81,7 +82,7 @@ public abstract class TaskList implements Iterable<Task> {
      *
      *do not depend from array or list class
      */
-    public  TaskList incoming(int from, int to){
+    public  TaskList incoming(Date from, Date to){
 
         LinkedTaskList linkListIntTo = new LinkedTaskList();
         Task point;
@@ -97,8 +98,8 @@ public abstract class TaskList implements Iterable<Task> {
                 // active task
                 // Not repeat
                 if (!point.isRepeated()) {
-                    if (point.getTime() > from
-                            && point.getTime() <= to) {
+                    if (point.getTime().getTime() > from.getTime()
+                            && point.getTime().getTime() <= to.getTime()) {
                         try {
                             linkListIntTo.add(point);
                         } catch (Exception e) {
@@ -109,10 +110,9 @@ public abstract class TaskList implements Iterable<Task> {
                 }
                 // repeat task
                 if (point.isRepeated()) {
-                    int a;
-                    a = point.nextTimeAfter(from);
-                    if (a >= from && a <= to) {
-                        // >= from >>> because can return -1
+                    long a = point.nextTimeAfter(from).getTime();
+                    if (a >= from.getTime() && a <= to.getTime()) {
+                        // >= from >>> last version return -1, but now is null
                         try {
                             linkListIntTo.add(point);
                         } catch (Exception e) {

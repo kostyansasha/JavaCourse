@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * Class that describes the Task
  *
@@ -9,10 +11,10 @@
 
 public class Task implements Cloneable {
     private String title;
-    private int time;
+    private Date time = new Date(0);
 
-    private int start;
-    private int end;
+    private Date start = new Date(0);
+    private Date end = new Date(0);
     private int interval;
 
     private boolean active;
@@ -29,18 +31,18 @@ public class Task implements Cloneable {
      * @param time  the beginning of the task
      * @throws Exception which show that the task has not been created
      */
-    public Task(String title, int time) throws Exception{
+    public Task(String title, Date time) throws Exception{
 
         if (title == null) {
             throw new Exception ("Title can not be null");
         }
 
-        if (time < 0) {
+        if (time.getTime() < 0) {
             throw new Exception ("time can not be < 0");
         }
 
         this.title = title;
-        this.time = time;
+        setTime(time);
     }
 
     // неактив задача €ка викон у заданому пром≥жку часу (≥ поч, ≥ к≥н)
@@ -56,7 +58,7 @@ public class Task implements Cloneable {
      * @param interval through which to repeat the task
      * @throws Exception which show that the task has not been created
      */
-    public Task(String title, int start, int end, int interval) throws Exception {
+    public Task(String title, Date start, Date end, int interval) throws Exception {
 
         if (title == null) {
             throw new Exception ("Title can not be null");
@@ -66,19 +68,16 @@ public class Task implements Cloneable {
             throw new Exception ("interval can not be 0");
         }
 
-        if ( time > end ) {
-            throw new Exception ("time can not be > endTime");
+        if ( start.after(end) /*time > end*/ ) {
+            throw new Exception ("start can not be > endTime");
         }
 
-        if ( interval >= end - time) {
+        if ( interval >= end.getTime() - start.getTime()) {
             throw new Exception ("interval can not be >= EndTime - Time");
         }
 
+        setTime(start, end, interval);
         this.title = title;
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
-        repeat = true;
     }
 
     /**
@@ -94,6 +93,7 @@ public class Task implements Cloneable {
      * @param title is name of task
      */
     public void setTitle(String title) {
+
         this.title = title;
     }
 
@@ -112,6 +112,7 @@ public class Task implements Cloneable {
      * @return status of task
      */
     public boolean isActive() {
+
         return active;
     }
 
@@ -123,12 +124,12 @@ public class Task implements Cloneable {
      * @return if task is repeated back task start time
      *          else return time
      */
-    public int getTime() {
+    public Date getTime() {
         if (repeat) {
-            return start;   //???
+            return new Date(start.getTime());   //???
         }
 
-        return time;
+        return new Date(time.getTime());
     }
 
     /**
@@ -137,12 +138,12 @@ public class Task implements Cloneable {
      *
      * @param time is time for set
      */
-    public void setTime(int time) {
+    public void setTime(Date time) {
         if (repeat) {
             repeat = false;
         }
 
-        this.time = time;
+        this.time.setTime(time.getTime());
     }
 
     // метод дл€ счит и изм зад что повтор€ютс€
@@ -152,12 +153,12 @@ public class Task implements Cloneable {
      * @return if task is repeated back task start time
      *          else return time
      */
-    public int getStartTime() {
+    public Date getStartTime() {
         if (repeat) {
-            return start;   //???
+            return new Date(start.getTime());   //???
         }
 
-        return time; //- end; ???? час виконан€ задачи
+        return new Date(time.getTime()); //- end; ???? час виконан€ задачи
     }
 
     /**
@@ -165,12 +166,12 @@ public class Task implements Cloneable {
      *
      * @return end time
      */
-    public int getEndTime() {
+    public Date getEndTime() {
         if (repeat) {
-            return end;   //???
+            return new Date(end.getTime());   //???
         }
 
-        return time;
+        return new Date(time.getTime());
     }
 
     /**
@@ -193,13 +194,13 @@ public class Task implements Cloneable {
      * @param end       of task
      * @param interval  of task
      */
-    public void setTime(int start, int end, int interval) {
+    public void setTime(Date start, Date end, int interval) {
         if (!repeat) {
             repeat = true;
         }
 
-        this.start = start;
-        this.end = end;
+        this.start.setTime(start.getTime());
+        this.end.setTime(end.getTime());
         this.interval = interval;
     }
 
@@ -223,31 +224,28 @@ public class Task implements Cloneable {
      * @param current after which the task is executed
      * @return time the next execution
      */
-    public int nextTimeAfter(int current) {
+    public Date nextTimeAfter(Date current) {
         if (active) {
-
-            if (time > current) {
+            if (time.after(current)) {
                 return time;
             }
-
             if (repeat) {
-                if (start > current) {
-                    return  start;
+                if (start.after(current)) {
+                    return start;
                 } else {
-                    int i = start;
-                    while (i <= current) {
-                        i += interval;
+                    long i = start.getTime();
+                    while (i <= current.getTime()) {
+                        i += interval*1000;
                     }
-                    if (i > end) {
-                        return -1;
+                    if (i > end.getTime()) {
+                        return null;
                     }
-                    return i;
+                    return new Date(i);
                 }
             }
 
         }
-
-        return -1;
+        return null;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,8 +256,8 @@ public class Task implements Cloneable {
 
         Task task = (Task) o;
 
-        if (time != task.time)   return false;
-        //if (start != task.start) return false;
+        if ( !time.equals(task.time) )   return false;
+        if ( !start.equals(task.start)) return false;
         //if (end != task.end)     return false;
         //if (interval != task.interval) return false;
         if (active != task.active) return false;
@@ -276,7 +274,7 @@ public class Task implements Cloneable {
 
         result = title != null ? title.hashCode() : 0;
 
-        result = 31 * result + time;
+         result = result + (int)time.getTime();
   //     result = 31 * result + start;
     //   result = 31 * result + end;
       // result = 31 * result + interval;
@@ -312,8 +310,10 @@ public class Task implements Cloneable {
 
         try {
             result.setTitle(this.getTitle());
-            result.setTime(this.getTime());
-            result.setTime(this.getStartTime(), this.getEndTime(), this.getRepeatInterval());
+
+            result.time = new Date(this.getTime().getTime());
+            result.setTime(new Date(this.getStartTime().getTime()), new Date(this.getEndTime().getTime()), this.getRepeatInterval());
+
             result.setActive(this.isActive());
             result.repeat = this.isRepeated();
         } catch (Exception e) {
