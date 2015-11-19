@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *
+ * array list
  *
  * @author Sasha Kostyan
  * @version %I%, %G%

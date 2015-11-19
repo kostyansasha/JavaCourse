@@ -21,11 +21,21 @@ public abstract class TaskList implements Iterable<Task> {
 
     public abstract Iterator<Task> iterator();
 
+    /**
+     * for check index in list
+     * @param index the estimated number in list
+     */
     public void rangeCheck(int index) {
         if (index < 0 || index >= size())
             throw new IndexOutOfBoundsException("Index: "+index);
     }
 
+    /**
+     * special metods for check that lists are equals
+     *
+     * @param o list for check
+     * @return true if list equals or false if not equals
+     */
     @Override
     public boolean  equals(Object o) {
         if (o == this)
@@ -73,56 +83,4 @@ public abstract class TaskList implements Iterable<Task> {
         return b.toString();
     }
 
-
-
-    /**
-     *
-     * method that returns a subset of the tasks that
-     * are scheduled to perform in the interval
-     *
-     *do not depend from array or list class
-     */
-    public  TaskList incoming(Date from, Date to){
-
-        LinkedTaskList linkListIntTo = new LinkedTaskList();
-        Task point;
-
-        for (int i = 0; i < size(); i++) {
-            point = getTask(i);
-
-            // Not active task
-            if (!point.isActive()) {
-                // continue next step
-                // continue;
-            } else {
-                // active task
-                // Not repeat
-                if (!point.isRepeated()) {
-                    if (point.getTime().getTime() > from.getTime()
-                            && point.getTime().getTime() <= to.getTime()) {
-                        try {
-                            linkListIntTo.add(point);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    continue;
-                }
-                // repeat task
-                if (point.isRepeated()) {
-                    long a = point.nextTimeAfter(from).getTime();
-                    if (a >= from.getTime() && a <= to.getTime()) {
-                        // >= from >>> last version return -1, but now is null
-                        try {
-                            linkListIntTo.add(point);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    continue;
-                }
-            }
-        }
-        return linkListIntTo;
-    }
 }

@@ -219,7 +219,7 @@ public class Task implements Cloneable {
     /**
      * method returns the next time the task after a specified
      * time current, if subsequent to the time the problem is
-     * not fulfilled, the method must return -1.
+     * not fulfilled, the method must return null (in old version is -1).
      *
      * @param current after which the task is executed
      * @return time the next execution
@@ -229,6 +229,7 @@ public class Task implements Cloneable {
             if (time.after(current)) {
                 return time;
             }
+
             if (repeat) {
                 if (start.after(current)) {
                     return start;
@@ -243,12 +244,17 @@ public class Task implements Cloneable {
                     return new Date(i);
                 }
             }
-
         }
         return null;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * special metods for check that task are equals
+     * @param o task for check
+     * @return true if tasks are equals, false if tasks are not equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -323,5 +329,4 @@ public class Task implements Cloneable {
 
         return result;
     }
-
 }

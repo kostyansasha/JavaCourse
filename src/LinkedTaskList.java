@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- *
+ * linked list
  *
  * @author Sasha Kostyan
  * @version %I%, %G%
@@ -125,8 +125,6 @@ public class LinkedTaskList extends TaskList implements  Cloneable{
             point = point.getNext();
             count += 1;
         }
-
-       // point.getTask().toString();
         return point.getTask();
     }
 
