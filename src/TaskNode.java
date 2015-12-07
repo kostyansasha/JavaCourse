@@ -1,3 +1,5 @@
+
+
 /**
  * Class  that defines the list node
  *
@@ -5,8 +7,9 @@
  * @version %I%, %G%
  */
 //package ua.sumdu.j2se.kostyan.tasks;
+import java.io.Serializable;
 
-public class TaskNode {
+public class TaskNode implements Serializable {
 
     private Task task;
     private TaskNode next;

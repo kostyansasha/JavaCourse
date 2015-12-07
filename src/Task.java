@@ -1,5 +1,3 @@
-import java.util.Date;
-
 /**
  * Class that describes the Task
  *
@@ -8,8 +6,10 @@ import java.util.Date;
  */
 
 //package ua.sumdu.j2se.kostyan.tasks;
+import java.io.Serializable;
+import java.util.Date;
 
-public class Task implements Cloneable {
+public class Task implements Cloneable, Serializable {
     private String title;
     private Date time = new Date(0);
 
@@ -263,7 +263,7 @@ public class Task implements Cloneable {
         Task task = (Task) o;
 
         if ( !time.equals(task.time) )   return false;
-        if ( !start.equals(task.start)) return false;
+        //if ( !start.equals(task.start)) return false;
         //if (end != task.end)     return false;
         //if (interval != task.interval) return false;
         if (active != task.active) return false;

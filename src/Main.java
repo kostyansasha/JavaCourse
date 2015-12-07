@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
 /**
  * Created by Саша on 03.10.2015.
  */

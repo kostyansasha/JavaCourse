@@ -21,7 +21,7 @@ public class Tasks {
      * @param tasks iterable of list
      * @param start date from which you want to search
      * @param end the date by which you want to search(inclusive)
-     * @return
+     * @return array of task that are scheduled to perform in the interval
      */
     public static Iterable<Task> incoming(Iterable<Task> tasks, Date start, Date end) {
         TaskList inlist = new ArrayTaskList();
@@ -40,7 +40,7 @@ public class Tasks {
      * @param tasks iterable of list
      * @param start date from which you want to search
      * @param end the date by which you want to search(inclusive)
-     * @return
+     * @return map of task, where key is day
      */
     public static SortedMap<Date, Set<Task>> calendar(Iterable<Task> tasks, Date start, Date end) {
         Date day;

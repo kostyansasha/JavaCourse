@@ -1,4 +1,5 @@
 //package ua.sumdu.j2se.kostyan.tasks;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
  * @version %I%, %G%
  */
 
-public class LinkedTaskList extends TaskList implements  Cloneable{
+public class LinkedTaskList extends TaskList implements  Cloneable, Serializable {
     // variable for size of array
     private int numberOfSizeArrayTask;
     //
