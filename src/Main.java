@@ -1,12 +1,19 @@
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 
-/**
- * Created by Саша on 03.10.2015.
- */
+//package ua.sumdu.j2se.kostyan.tasks;
 public class Main {
     public static void main(String[] args) {
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    View.Start();
+                } catch (IOException e) {
 
+                }
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 }

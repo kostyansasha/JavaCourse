@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 
 /**
  * array list
- *
  * @author Sasha Kostyan
  * @version %I%, %G%
+ * @updated 17-дек-2015 22:26:44
  */
 
-public class ArrayTaskList extends TaskList implements  Cloneable, Serializable {
+public class ArrayTaskList extends TaskList implements Cloneable, Serializable {
 
     // variable for size of array
     private int numberOfSizeArrayTask;

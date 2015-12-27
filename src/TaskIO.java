@@ -5,9 +5,9 @@ import java.util.Date;
 
 /**
  * methods of writting and reading lists tasks
- *
  * @author Sasha Kostyan
  * @version %I%, %G%
+ * @updated 17-дек-2015 22:26:45
  */
 public class TaskIO{
 

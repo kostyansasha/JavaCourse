@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 
 /**
  * linked list
- *
  * @author Sasha Kostyan
  * @version %I%, %G%
+ * @updated 17-дек-2015 22:26:45
  */
 
-public class LinkedTaskList extends TaskList implements  Cloneable, Serializable {
+public class LinkedTaskList extends TaskList implements Cloneable, Serializable {
     // variable for size of array
     private int numberOfSizeArrayTask;
     //

@@ -5,9 +5,9 @@ import java.util.*;
 
 /**
  * class to work with collections of tasks
- *
  * @author Sasha Kostyan
  * @version %I%, %G%
+ * @updated 17-дек-2015 22:26:45
  */
 
 public class Tasks {
